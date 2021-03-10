@@ -4,10 +4,12 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <label class="el-form-item-label">电影院名称</label>
-        <el-input v-model="query.name" clearable placeholder="电影院名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-        <label class="el-form-item-label">电影院地址</label>
-        <el-input v-model="query.address" clearable placeholder="电影院地址" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <label class="el-form-item-label">放映厅名称</label>
+        <el-input v-model="query.name" clearable placeholder="放映厅名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <label class="el-form-item-label">放映厅容量</label>
+        <el-input v-model="query.capacity" clearable placeholder="放映厅容量" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <label class="el-form-item-label">影院名称</label>
+        <el-input v-model="query.cinemaId" clearable placeholder="影院名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <rrOperation :crud="crud" />
       </div>
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
@@ -15,14 +17,14 @@
       <!--表单组件-->
       <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="450px">
         <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
-          <el-form-item label="电影院名称" prop="name">
+          <el-form-item label="放映厅名称" prop="name">
             <el-input v-model="form.name" style="width: 300px;" />
           </el-form-item>
-          <el-form-item label="电影院地址" prop="address">
-            <el-input v-model="form.address" style="width: 300px;" />
+          <el-form-item label="放映厅容量" prop="capacity">
+            <el-input v-model="form.capacity" style="width: 300px;" />
           </el-form-item>
-          <el-form-item label="电影院简介">
-            <el-input v-model="form.introd" :rows="3" type="textarea" style="width: 300px;" />
+          <el-form-item label="影院名称" prop="cinemaId">
+            未设置字典，请手动设置 Select
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -33,10 +35,10 @@
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="name" label="电影院名称" />
-        <el-table-column prop="address" label="电影院地址" />
-        <el-table-column prop="introd" label="电影院简介" />
-        <el-table-column v-if="checkPer(['admin','cinema:edit','cinema:del'])" label="操作" width="150px" align="center">
+        <el-table-column prop="name" label="放映厅名称" />
+        <el-table-column prop="capacity" label="放映厅容量" />
+        <el-table-column prop="cinemaId" label="影院名称" />
+        <el-table-column v-if="checkPer(['admin','hall:edit','hall:del'])" label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <udOperation
               :data="scope.row"
@@ -52,42 +54,46 @@
 </template>
 
 <script>
-import crudCinema from '@/api/cinema/cinema'
+import crudHall from '@/api/cinema/hall'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 
-const defaultForm = { cinemaId: null, name: null, address: null, introd: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
+const defaultForm = { hallId: null, name: null, capacity: null, cinemaId: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
 export default {
-  name: 'Cinema',
+  name: 'Hall',
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
-    return CRUD({ title: '影院详情', url: 'api/cinema', idField: 'cinemaId', sort: 'cinemaId,desc', crudMethod: { ...crudCinema }})
+    return CRUD({ title: '放映厅管理', url: 'api/hall', idField: 'hallId', sort: 'hallId,desc', crudMethod: { ...crudHall }})
   },
   data() {
     return {
       permission: {
-        add: ['admin', 'cinema:add'],
-        edit: ['admin', 'cinema:edit'],
-        del: ['admin', 'cinema:del']
+        add: ['admin', 'hall:add'],
+        edit: ['admin', 'hall:edit'],
+        del: ['admin', 'hall:del']
       },
       rules: {
-        cinemaId: [
+        hallId: [
           { required: true, message: '主键不能为空', trigger: 'blur' }
         ],
         name: [
-          { required: true, message: '电影院名称不能为空', trigger: 'blur' }
+          { required: true, message: '放映厅名称不能为空', trigger: 'blur' }
         ],
-        address: [
-          { required: true, message: '电影院地址不能为空', trigger: 'blur' }
+        capacity: [
+          { required: true, message: '放映厅容量不能为空', trigger: 'blur' }
+        ],
+        cinemaId: [
+          { required: true, message: '影院名称不能为空', trigger: 'blur' }
         ]
       },
       queryTypeOptions: [
-        { key: 'name', display_name: '电影院名称' },
-        { key: 'address', display_name: '电影院地址' }
+        { key: 'name', display_name: '放映厅名称' },
+        { key: 'capacity', display_name: '放映厅容量' },
+        { key: 'cinemaId', display_name: '影院名称' }
       ]
     }
   },

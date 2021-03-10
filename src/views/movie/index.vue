@@ -24,48 +24,48 @@
       <crudOperation :permission="permission" />
       <!--表单组件-->
       <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
-        <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
+        <el-form ref="form" :model="form" :rules="rules" size="small" label-width="150px">
           <el-form-item label="名称" prop="name">
-            <el-input v-model="form.name" style="width: 370px;" />
+            <el-input v-model="form.name" style="width: 300px;" />
           </el-form-item>
           <el-form-item label="英文名称">
-            <el-input v-model="form.nameEn" style="width: 370px;" />
+            <el-input v-model="form.nameEn" style="width: 300px;" />
           </el-form-item>
           <el-form-item label="海报">
-            <el-input v-model="form.img" style="width: 370px;" />
+            <el-input v-model="form.img" style="width: 300px;" />
           </el-form-item>
-          <el-form-item label="类型（英文逗号分隔）">
-            <el-input v-model="form.type" style="width: 370px;" />
+          <el-form-item label="类型(英文逗号分隔)">
+            <el-input v-model="form.type" style="width: 300px;" />
           </el-form-item>
           <el-form-item label="语言">
-            <el-input v-model="form.language" style="width: 370px;" />
+            <el-input v-model="form.language" style="width: 300px;" />
           </el-form-item>
           <el-form-item label="时长">
-            <el-input v-model="form.duration" style="width: 370px;" />
+            <el-input v-model="form.duration" style="width: 300px;" />
           </el-form-item>
           <el-form-item label="上映日期">
-            <el-date-picker v-model="form.releaseDate" type="datetime" style="width: 370px;" />
+            <el-date-picker v-model="form.releaseDate" type="datetime" style="width: 300px;" />
           </el-form-item>
           <el-form-item label="上映地点">
-            <el-input v-model="form.releaseLocation" style="width: 370px;" />
+            <el-input v-model="form.releaseLocation" style="width: 300px;" />
           </el-form-item>
           <el-form-item label="综合评分">
-            <el-input v-model="form.score" style="width: 370px;" />
+            <el-input v-model="form.score" style="width: 300px;" />
           </el-form-item>
           <el-form-item label="评价人数">
-            <el-input v-model="form.evaluator" style="width: 370px;" />
+            <el-input v-model="form.evaluator" style="width: 300px;" />
           </el-form-item>
           <el-form-item label="剧情简介">
-            <el-input v-model="form.details" :rows="3" type="textarea" style="width: 370px;" />
+            <el-input v-model="form.details" :rows="3" type="textarea" style="width: 300px;" />
           </el-form-item>
           <el-form-item label="预告片">
-            <el-input v-model="form.video" style="width: 370px;" />
+            <el-input v-model="form.video" style="width: 300px;" />
           </el-form-item>
-          <el-form-item label="导演（英文逗号分隔）">
-            <el-input v-model="form.director" style="width: 370px;" />
+          <el-form-item label="导演(英文逗号分隔)">
+            <el-input v-model="form.director" style="width: 300px;" />
           </el-form-item>
-          <el-form-item label="演员（英文逗号分隔）">
-            <el-input v-model="form.actor" style="width: 370px;" />
+          <el-form-item label="演员(英文逗号分隔)">
+            <el-input v-model="form.actor" style="width: 300px;" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
