@@ -32,7 +32,16 @@
             <el-input v-model="form.nameEn" style="width: 300px;" />
           </el-form-item>
           <el-form-item label="海报">
-            <el-input v-model="form.img" style="width: 300px;" />
+            <!-- <el-input v-model="form.img" style="width: 300px;" /> -->
+            <div class="el-upload">
+              <img :src="form.imgName ? baseApi + '/file/' + form.imgName : Poster" title="点击上传海报" class="poster" @click="toggleShow">
+              <myUpload
+                v-model="show"
+                :headers="headers"
+                :url="updatePosterApi"
+                @crop-upload-success="cropUploadSuccess"
+              />
+            </div>
           </el-form-item>
           <el-form-item label="类型(英文逗号分隔)">
             <el-input v-model="form.type" style="width: 300px;" />
@@ -60,6 +69,9 @@
           </el-form-item>
           <el-form-item label="预告片">
             <el-input v-model="form.video" style="width: 300px;" />
+          </el-form-item>
+          <el-form-item label="类型(英文逗号分隔)">
+            <el-input v-model="form.type" style="width: 300px;" />
           </el-form-item>
           <el-form-item label="导演(英文逗号分隔)">
             <el-input v-model="form.director" style="width: 300px;" />
@@ -108,17 +120,26 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
+import { getToken } from '@/utils/auth'
+import myUpload from 'vue-image-crop-upload'
+import { mapGetters } from 'vuex'
+import Poster from '@/assets/images/poster.png'
 
 const defaultForm = { movieInfoId: null, name: null, nameEn: null, img: null, type: null, language: null, duration: null, releaseDate: null, releaseLocation: null, score: null, evaluator: null, details: null, video: null, createBy: null, updateBy: null, createTime: null, updateTime: null, director: null, actor: null }
 export default {
   name: 'MovieInfo',
-  components: { pagination, crudOperation, rrOperation, udOperation },
+  components: { pagination, crudOperation, rrOperation, udOperation, myUpload },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
     return CRUD({ title: '电影详情', url: 'api/movieInfo', idField: 'movieInfoId', sort: 'movieInfoId,desc', crudMethod: { ...crudMovieInfo }})
   },
   data() {
     return {
+      show: false,
+      Poster: Poster,
+      headers: {
+        'Authorization': getToken()
+      },
       permission: {
         add: ['admin', 'movieInfo:add'],
         edit: ['admin', 'movieInfo:edit'],
@@ -140,15 +161,32 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapGetters([
+      'user',
+      'updatePosterApi',
+      'baseApi'
+    ])
+  },
   methods: {
     // 钩子：在获取表格数据之前执行，false 则代表不获取数据
     [CRUD.HOOK.beforeRefresh]() {
       return true
-    }
+    },
+    toggleShow() {
+      this.show = !this.show
+    },
+    cropUploadSuccess(jsonData, field) {
+      store.dispatch('GetInfo').then(() => {})
+    },
   }
 }
 </script>
 
 <style scoped>
+  .poster {
+    width: 70px;
+    height: 100px;
+  }
 
 </style>
