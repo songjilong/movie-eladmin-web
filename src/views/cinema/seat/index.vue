@@ -4,12 +4,15 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
+        <label class="el-form-item-label">放映厅名称</label>
+        <el-input v-model="query.hallName" clearable placeholder="放映厅名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <label class="el-form-item-label">座位号</label>
         <el-input v-model="query.number" clearable placeholder="座位号" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <label class="el-form-item-label">是否损坏</label>
-        <el-input v-model="query.isDamage" clearable placeholder="是否损坏" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-        <label class="el-form-item-label">放映厅id</label>
-        <el-input v-model="query.hallId" clearable placeholder="放映厅id" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-select v-model="query.isDamage" clearable placeholder="请选择" style="width: 90px" class="filter-item" @keyup.enter.native="crud.toQuery">
+          <el-option label="是" value="true" />
+          <el-option label="否" value="false" />
+        </el-select>
         <rrOperation :crud="crud" />
       </div>
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
@@ -23,8 +26,10 @@
           <el-form-item label="是否损坏" prop="isDamage">
             <el-radio v-for="item in dict.seat_is_damage" :key="item.id" v-model="form.isDamage" :label="item.value">{{ item.label }}</el-radio>
           </el-form-item>
-          <el-form-item label="放映厅id" prop="hallId">
-            <el-input v-model="form.hallId" style="width: 370px;" />
+          <el-form-item label="放映厅名称" prop="hall.hallId">
+            <el-select v-model.number="form.hall.hallId" placeholder="请选择" style="width: 370px">
+              <el-option v-for="item in halls" :key="item.hallId" :label="item.name" :value="item.hallId" />
+            </el-select>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -35,13 +40,13 @@
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
+        <el-table-column prop="hall.name" label="放映厅名称" />
         <el-table-column prop="number" label="座位号" />
         <el-table-column prop="isDamage" label="是否损坏">
           <template slot-scope="scope">
             {{ dict.label.seat_is_damage[scope.row.isDamage] }}
           </template>
         </el-table-column>
-        <el-table-column prop="hallId" label="放映厅id" />
         <el-table-column v-if="checkPer(['admin','seat:edit','seat:del'])" label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <udOperation
@@ -65,7 +70,7 @@ import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 
-const defaultForm = { seatId: null, number: null, isDamage: null, hallId: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
+const defaultForm = { seatId: null, number: null, isDamage: null, hall: {hallId: null}, createBy: null, updateBy: null, createTime: null, updateTime: null }
 export default {
   name: 'Seat',
   components: { pagination, crudOperation, rrOperation, udOperation },
@@ -76,6 +81,7 @@ export default {
   },
   data() {
     return {
+      halls:[],
       permission: {
         add: ['admin', 'seat:add'],
         edit: ['admin', 'seat:edit'],
@@ -90,15 +96,12 @@ export default {
         ],
         isDamage: [
           { required: true, message: '是否损坏不能为空', trigger: 'blur' }
-        ],
-        hallId: [
-          { required: true, message: '放映厅id不能为空', trigger: 'blur' }
         ]
       },
       queryTypeOptions: [
         { key: 'number', display_name: '座位号' },
         { key: 'isDamage', display_name: '是否损坏' },
-        { key: 'hallId', display_name: '放映厅id' }
+        { key: 'hallName', display_name: '放映厅名称' }
       ]
     }
   },
@@ -106,6 +109,27 @@ export default {
     // 钩子：在获取表格数据之前执行，false 则代表不获取数据
     [CRUD.HOOK.beforeRefresh]() {
       return true
+    },
+    // 新增编辑前做的操作
+    [CRUD.HOOK.beforeToCU](crud, form) {
+      this.initSelect()
+    },
+    // 提交前做的操作
+    [CRUD.HOOK.afterValidateCU](crud) {
+      if (!crud.form.hall.hallId) {
+        this.$message({
+          message: '放映厅不能为空',
+          type: 'warning'
+        })
+        return false
+      }
+      return true
+    },
+
+    initSelect() {
+      crudSeat.getHalls().then(res => {
+        this.halls = res.content
+      })
     }
   }
 }

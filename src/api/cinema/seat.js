@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function getHalls() {
+  return request({
+    url: 'api/hall',
+    method: 'get'
+  })
+}
+
 export function add(data) {
   return request({
     url: 'api/seat',
@@ -24,4 +31,4 @@ export function edit(data) {
   })
 }
 
-export default { add, edit, del }
+export default { add, edit, del, getHalls }
