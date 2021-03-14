@@ -21,7 +21,7 @@
             <el-input v-model="form.number" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="是否损坏" prop="isDamage">
-            <el-radio v-model="form.isDamage" v-for="item in dict.seat_is_damage" :key="item.id" :label="item.value">{{ item.label }}</el-radio>
+            <el-radio v-for="item in dict.seat_is_damage" :key="item.id" v-model="form.isDamage" :label="item.value">{{ item.label }}</el-radio>
           </el-form-item>
           <el-form-item label="放映厅id" prop="hallId">
             <el-input v-model="form.hallId" style="width: 370px;" />

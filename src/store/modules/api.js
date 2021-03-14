@@ -13,7 +13,7 @@ const api = {
     // 修改头像
     updateAvatarApi: baseUrl + '/api/users/updateAvatar',
     // 修改海报
-    updatePosterApi: baseUrl + '/api/users/updatePoster',
+    updatePosterApi: baseUrl + '/api/movieInfo/updatePoster',
     // 上传文件到七牛云
     qiNiuUploadApi: baseUrl + '/api/qiNiuContent',
     // Sql 监控

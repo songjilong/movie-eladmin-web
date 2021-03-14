@@ -38,7 +38,12 @@
               <myUpload
                 v-model="show"
                 :headers="headers"
-                :url="updatePosterApi"
+                :url="updatePosterApi + '/' + form.movieInfoId"
+                field="poster"
+                :no-circle="true"
+                :no-rotate="false"
+                :width="200"
+                :height="300"
                 @crop-upload-success="cropUploadSuccess"
               />
             </div>
@@ -90,7 +95,11 @@
         <el-table-column type="selection" width="55" />
         <el-table-column prop="name" label="名称" />
         <el-table-column prop="nameEn" label="英文名称" />
-        <el-table-column prop="img" label="海报" />
+        <el-table-column prop="imgName" label="海报">
+          <template scope="scope">
+            <img :src="scope.row.imgName ? baseApi + '/file/' + scope.row.imgName : Poster" class="poster">
+          </template>
+        </el-table-column>
         <el-table-column prop="type" label="类型" />
         <el-table-column prop="language" label="语言" />
         <el-table-column prop="duration" label="时长" />
@@ -124,8 +133,9 @@ import { getToken } from '@/utils/auth'
 import myUpload from 'vue-image-crop-upload'
 import { mapGetters } from 'vuex'
 import Poster from '@/assets/images/poster.png'
+import store from '@/store'
 
-const defaultForm = { movieInfoId: null, name: null, nameEn: null, img: null, type: null, language: null, duration: null, releaseDate: null, releaseLocation: null, score: null, evaluator: null, details: null, video: null, createBy: null, updateBy: null, createTime: null, updateTime: null, director: null, actor: null }
+const defaultForm = { movieInfoId: null, name: null, nameEn: null, img: null, imgName: null, type: null, language: null, duration: null, releaseDate: null, releaseLocation: null, score: null, evaluator: null, details: null, video: null, createBy: null, updateBy: null, createTime: null, updateTime: null, director: null, actor: null }
 export default {
   name: 'MovieInfo',
   components: { pagination, crudOperation, rrOperation, udOperation, myUpload },
@@ -163,7 +173,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'user',
+      'movieInfo',
       'updatePosterApi',
       'baseApi'
     ])
@@ -178,7 +188,7 @@ export default {
     },
     cropUploadSuccess(jsonData, field) {
       store.dispatch('GetInfo').then(() => {})
-    },
+    }
   }
 }
 </script>
