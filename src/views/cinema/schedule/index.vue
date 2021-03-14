@@ -4,14 +4,14 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <label class="el-form-item-label">放映厅名称</label>
-        <el-input v-model="query.hallName" clearable placeholder="放映厅名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-        <label class="el-form-item-label">电影名称</label>
-        <el-input v-model="query.movieName" clearable placeholder="电影名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <!-- <label class="el-form-item-label">放映厅名称</label> -->
+        <el-input v-model="query.hallName" clearable placeholder="输入放映厅名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <!-- <label class="el-form-item-label">电影名称</label> -->
+        <el-input v-model="query.movieName" clearable placeholder="输入电影名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <date-range-picker
           v-model="query.beginTime"
-          start-placeholder="beginTimeStart"
-          end-placeholder="beginTimeStart"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
           class="date-item"
         />
         <rrOperation :crud="crud" />
@@ -76,11 +76,12 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
+import DateRangePicker from '@/components/DateRangePicker'
 
 const defaultForm = { scheduleId: null, beginTime: null, price: null, remain: null, hall: {hallId: null}, movieInfo:{movieInfoId: null}, createBy: null, updateBy: null, createTime: null, updateTime: null }
 export default {
   name: 'Schedule',
-  components: { pagination, crudOperation, rrOperation, udOperation },
+  components: { pagination, crudOperation, rrOperation, udOperation, DateRangePicker},
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
     return CRUD({ title: '排片管理', url: 'api/schedule', idField: 'scheduleId', sort: 'scheduleId,desc', crudMethod: { ...crudSchedule }})
@@ -105,8 +106,9 @@ export default {
         ]
       },
       queryTypeOptions: [
-        { key: 'hallName', display_name: '放映厅id' },
-        { key: 'movieName', display_name: '电影id' }
+        { key: 'hallName', display_name: '放映厅名称' },
+        { key: 'movieName', display_name: '电影名称' },
+        { key: 'beginTime', display_name: '放映时间' }
       ]
     }
   },

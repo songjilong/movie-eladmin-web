@@ -4,18 +4,18 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <label class="el-form-item-label">名称</label>
-        <el-input v-model="query.name" clearable placeholder="名称" style="width: 150px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-        <label class="el-form-item-label">类型</label>
-        <el-input v-model="query.type" clearable placeholder="类型" style="width: 150px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-        <label class="el-form-item-label">语言</label>
-        <el-input v-model="query.language" clearable placeholder="语言" style="width: 150px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-        <label class="el-form-item-label">上映地点</label>
-        <el-input v-model="query.releaseLocation" clearable placeholder="上映地点" style="width: 150px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <!-- <label class="el-form-item-label">名称</label> -->
+        <el-input v-model="query.name" clearable placeholder="输入电影名称" style="width: 150px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <!-- <label class="el-form-item-label">类型</label> -->
+        <el-input v-model="query.type" clearable placeholder="输入类型" style="width: 150px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <!-- <label class="el-form-item-label">语言</label> -->
+        <el-input v-model="query.language" clearable placeholder="输入语言" style="width: 150px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <!-- <label class="el-form-item-label">上映地点</label> -->
+        <el-input v-model="query.releaseLocation" clearable placeholder="输入上映地点" style="width: 150px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <date-range-picker
           v-model="query.releaseDate"
-          start-placeholder="releaseDateStart"
-          end-placeholder="releaseDateStart"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
           class="date-item"
         />
         <rrOperation :crud="crud" />
@@ -134,11 +134,12 @@ import myUpload from 'vue-image-crop-upload'
 import { mapGetters } from 'vuex'
 import Poster from '@/assets/images/poster.png'
 import store from '@/store'
+import DateRangePicker from '@/components/DateRangePicker'
 
 const defaultForm = { movieInfoId: null, name: null, nameEn: null, img: null, imgName: null, type: null, language: null, duration: null, releaseDate: null, releaseLocation: null, score: null, evaluator: null, details: null, video: null, createBy: null, updateBy: null, createTime: null, updateTime: null, director: null, actor: null }
 export default {
   name: 'MovieInfo',
-  components: { pagination, crudOperation, rrOperation, udOperation, myUpload },
+  components: { pagination, crudOperation, rrOperation, udOperation, myUpload, DateRangePicker },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
     return CRUD({ title: '电影详情', url: 'api/movieInfo', idField: 'movieInfoId', sort: 'movieInfoId,desc', crudMethod: { ...crudMovieInfo }})

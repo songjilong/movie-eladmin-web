@@ -4,12 +4,12 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <label class="el-form-item-label">放映厅名称</label>
-        <el-input v-model="query.hallName" clearable placeholder="放映厅名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-        <label class="el-form-item-label">座位号</label>
-        <el-input v-model="query.number" clearable placeholder="座位号" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-        <label class="el-form-item-label">是否损坏</label>
-        <el-select v-model="query.isDamage" clearable placeholder="请选择" style="width: 90px" class="filter-item" @keyup.enter.native="crud.toQuery">
+        <!-- <label class="el-form-item-label">放映厅名称</label> -->
+        <el-input v-model="query.hallName" clearable placeholder="输入放映厅名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <!-- <label class="el-form-item-label">座位号</label> -->
+        <el-input v-model="query.number" clearable placeholder="输入座位号" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <!-- <label class="el-form-item-label">是否损坏</label> -->
+        <el-select v-model="query.isDamage" clearable placeholder="是否损坏" style="width: 105px" class="filter-item" @keyup.enter.native="crud.toQuery">
           <el-option label="是" value="true" />
           <el-option label="否" value="false" />
         </el-select>

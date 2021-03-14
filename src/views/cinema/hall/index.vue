@@ -4,12 +4,12 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <label class="el-form-item-label">放映厅名称</label>
-        <el-input v-model="query.name" clearable placeholder="放映厅名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-        <label class="el-form-item-label">放映厅容量</label>
-        <el-input v-model="query.capacity" clearable placeholder="放映厅容量" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-        <label class="el-form-item-label">影院名称</label>
-        <el-input v-model="query.cinemaName" clearable placeholder="影院名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <!-- <label class="el-form-item-label">影院名称</label> -->
+        <el-input v-model="query.cinemaName" clearable placeholder="输入影院名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <!-- <label class="el-form-item-label">放映厅名称</label> -->
+        <el-input v-model="query.name" clearable placeholder="输入放映厅名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <!-- <label class="el-form-item-label">放映厅容量</label> -->
+        <el-input v-model="query.capacity" clearable placeholder="输入放映厅容量" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <rrOperation :crud="crud" />
       </div>
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
