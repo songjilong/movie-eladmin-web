@@ -10,6 +10,8 @@
         <el-input v-model="query.name" clearable placeholder="输入放映厅名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <!-- <label class="el-form-item-label">放映厅容量</label> -->
         <el-input v-model="query.capacity" clearable placeholder="输入放映厅容量" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <!-- 搜索 -->
+        <el-input v-model="query.type" clearable placeholder="放映厅类型" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <rrOperation :crud="crud" />
       </div>
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
@@ -22,6 +24,15 @@
           </el-form-item>
           <el-form-item label="放映厅容量" prop="capacity">
             <el-input v-model="form.capacity" style="width: 300px;" />
+          </el-form-item>
+          <el-form-item label="放映厅类型">
+            <el-select v-model="form.type" filterable placeholder="请选择">
+              <el-option
+                v-for="item in dict.hall_type"
+                :key="item.id"
+                :label="item.label"
+                :value="item.value" />
+            </el-select>
           </el-form-item>
           <el-form-item label="电影院名称" prop="cinema.id">
             <el-select v-model.number="form.cinema.cinemaId" placeholder="请选择" style="width: 300px">
@@ -40,6 +51,11 @@
         <el-table-column prop="cinema.name" label="影院名称" />
         <el-table-column prop="name" label="放映厅名称" />
         <el-table-column prop="capacity" label="放映厅容量" />
+        <el-table-column prop="type" label="放映厅类型">
+          <template slot-scope="scope">
+            {{ dict.label.hall_type[scope.row.type] }}
+          </template>
+        </el-table-column>
         <el-table-column v-if="checkPer(['admin','hall:edit','hall:del'])" label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <udOperation
@@ -63,11 +79,12 @@ import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 
-const defaultForm = { hallId: null, name: null, capacity: null, cinema:{cinemaId: null}, createBy: null, updateBy: null, createTime: null, updateTime: null }
+const defaultForm = { hallId: null, name: null, capacity: null, cinema:{cinemaId: null}, type: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
 export default {
   name: 'Hall',
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
+  dicts: ['hall_type'],
   cruds() {
     return CRUD({ title: '放映厅管理', url: 'api/hall', idField: 'hallId', sort: 'hallId,desc', crudMethod: { ...crudHall }})
   },
@@ -93,7 +110,8 @@ export default {
       queryTypeOptions: [
         { key: 'name', display_name: '放映厅名称' },
         { key: 'capacity', display_name: '放映厅容量' },
-        { key: 'cinemaName', display_name: '影院名称' }
+        { key: 'cinemaName', display_name: '影院名称' },
+        { key: 'type', display_name: '放映厅类型' }
       ]
     }
   },
